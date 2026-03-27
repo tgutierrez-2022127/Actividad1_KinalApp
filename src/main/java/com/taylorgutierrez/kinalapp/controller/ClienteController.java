@@ -13,8 +13,8 @@ import java.util.List;
 
 @RestController
 //@RestController = @Controller + @ResponseBody
-@RequestMapping("/clientes")
-//Todas las rutas en este controlador deben empezar con /clientes
+@RequestMapping("/cliente")
+//Todas las rutas en este controlador deben empezar con /cliente
 public class ClienteController {
 
     public final IClienteService clienteService;
@@ -25,7 +25,7 @@ public class ClienteController {
     //Responde a peticiones GET
     @GetMapping
     //ResponseEntity nos permite controlar el codifo HTTP y el cuerpo
-    public ResponseEntity <List<Cliente>> listarClientes(){
+    public ResponseEntity <List<Cliente>> listarCliente(){
         List<Cliente> clientes = clienteService.listarClientes();
         //delegamos al servicio
         return ResponseEntity.ok(clientes);
