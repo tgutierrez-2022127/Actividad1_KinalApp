@@ -11,7 +11,7 @@ import jakarta.persistence.Table;
 @Table(name = "clientes")
 public class Cliente {
     @Id
-    @Column(name = "dpi_cliente")
+    @Column(name = "dpi_clientes")
     private String dpiCliente;
     @Column
     private String nombreCliente;
