@@ -40,6 +40,9 @@ API REST desarrollada con Spring Boot para la gestión de:
 - POST /api/ventas
 - PUT /api/ventas/{id}
 - DELETE /api/ventas/{id}
+-<img width="2726" height="768" alt="image" src="https://github.com/user-attachments/assets/8070fd95-5455-4318-b200-69dc3d8df9b6" />
+
+
 
 # Detalle Venta
 
