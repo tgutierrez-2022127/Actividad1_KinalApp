@@ -26,6 +26,8 @@ API REST desarrollada con Spring Boot para la gestión de:
 - POST /api/clientes
 - PUT /api/clientes/{id}
 - DELETE /api/clientes/{id}
+- <img width="2726" height="768" alt="image" src="https://github.com/user-attachments/assets/49cc722c-f2b4-458f-a055-17e75d5d6474" />
+
 
 # Producto
 
@@ -33,6 +35,8 @@ API REST desarrollada con Spring Boot para la gestión de:
 - POST /api/productos
 - PUT /api/productos/{id}
 - DELETE /api/productos/{id}
+- <img width="2726" height="768" alt="image" src="https://github.com/user-attachments/assets/275483a1-3d0d-4295-9737-4574ce5e2e23" />
+
 
 # Venta
 
@@ -40,7 +44,8 @@ API REST desarrollada con Spring Boot para la gestión de:
 - POST /api/ventas
 - PUT /api/ventas/{id}
 - DELETE /api/ventas/{id}
--<img width="2726" height="768" alt="image" src="https://github.com/user-attachments/assets/8070fd95-5455-4318-b200-69dc3d8df9b6" />
+-<img width="672" height="380" alt="image" src="https://github.com/user-attachments/assets/825c7d81-580d-42e5-8548-0eff9b3189b2" />
+
 
 
 
@@ -50,6 +55,8 @@ API REST desarrollada con Spring Boot para la gestión de:
 - POST /api/detalle-venta
 - PUT /api/detalle-venta/{id}
 - DELETE /api/detalle-venta/{id}
+- <img width="2726" height="768" alt="image" src="https://github.com/user-attachments/assets/accec0ae-fed7-4f39-9ba8-49d971b510fd" />
+
 
 # Pruebas
 
