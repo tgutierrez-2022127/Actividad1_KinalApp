@@ -27,4 +27,6 @@ public interface IProductoService {
     boolean existePorId(Long id);
 
     List<Producto> buscarPorStock(int stock);
+
+    List<Producto> listar();
 }

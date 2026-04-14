@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Clientes - KinalApp</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f5f5f5;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+        }
+        h1 {
+            color: #667eea;
+        }
+        .btn {
+            display: inline-block;
+            padding: 10px 15px;
+            background: #667eea;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 10px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background: #667eea;
+            color: white;
+        }
+        .btn-small {
+            padding: 5px 10px;
+            font-size: 12px;
+            margin: 2px;
+        }
+        .btn-edit {
+            background: #ffc107;
+        }
+        .btn-delete {
+            background: #dc3545;
+        }
+        .volver {
+            background: #6c757d;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1> Gestión de Clientes</h1>
+    <a href="/" class="btn volver">← Volver al inicio</a>
+    <a href="/api/clientes" class="btn"> Ver API (JSON)</a>
+
+    <p style="margin-top: 20px; color: #666;">
+         Los endpoints REST están disponibles en <code>/api/clientes</code>
+    </p>
+
+    <h3> Endpoints disponibles:</h3>
+    <ul>
+        <li><strong>GET /api/clientes</strong> - Listar todos los clientes</li>
+        <li><strong>GET /api/clientes/{id}</strong> - Obtener un cliente por ID</li>
+        <li><strong>POST /api/clientes</strong> - Crear un nuevo cliente</li>
+        <li><strong>PUT /api/clientes/{id}</strong> - Actualizar un cliente</li>
+        <li><strong>DELETE /api/clientes/{id}</strong> - Eliminar un cliente</li>
+    </ul>
+
+    <h3> Ejemplo de JSON para POST/PUT:</h3>
+    <pre style="background: #f0f0f0; padding: 10px; border-radius: 5px;">
+{
+    "nombre": "Taylor Gutierrez",
+    "email": "taylor@ejemplo.com",
+    "telefono": "12345678",
+    "direccion": "Ciudad de Guatemala"
+}
+        </pre>
+</div>
+</body>
+</html>

@@ -1,43 +1,48 @@
 package com.taylorgutierrez.kinalapp.entity;
 
-
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
-
+import jakarta.persistence.*;
 
 @Entity
 @Table(name = "clientes")
 public class Cliente {
+
     @Id
-    @Column(name = "dpi_clientes")
+    @Column(name = "dpi_cliente", nullable = false, length = 20)
     private String dpiCliente;
-    @Column
+
+    @Column(name = "nombre_cliente")
     private String nombreCliente;
-    @Column
+
+    @Column(name = "apellido_cliente")
     private String apellidoCliente;
-    @Column
+
+    @Column(name = "direccion")
     private String direccion;
-    @Column
+
+    @Column(name = "estado")
     private int estado;
 
+
+    // Constructor vacío
     public Cliente() {
     }
 
-    public Cliente(String DPICliente, String nombreCliente, String apellidoCliente, String direccion, int estado) {
-        this.dpiCliente = DPICliente;
+    // Constructor con parámetros
+    public Cliente(String dpiCliente, String nombreCliente, String apellidoCliente, String direccion, int estado) {
+        this.dpiCliente = dpiCliente;
         this.nombreCliente = nombreCliente;
         this.apellidoCliente = apellidoCliente;
         this.direccion = direccion;
         this.estado = estado;
     }
 
+
+
     public String getDpiCliente() {
         return dpiCliente;
     }
 
-    public void setDpICliente(String dpiCliente) {
+    public void setDpiCliente(String dpiCliente) {
         this.dpiCliente = dpiCliente;
     }
 

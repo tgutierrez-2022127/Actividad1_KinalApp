@@ -2,12 +2,13 @@ package com.taylorgutierrez.kinalapp.repository;
 
 import com.taylorgutierrez.kinalapp.entity.Venta;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+@Repository
 public interface VentaRepository extends JpaRepository<Venta, Long> {
 
-    // Buscar ventas por usuario
-    List<Venta> findByUsuario_IdUsuario(Long idUsuario);
 
+    List<Venta> findByUsuarioIdUsuario(Long idUsuario);
 }

@@ -1,54 +1,59 @@
 package com.taylorgutierrez.kinalapp.controller;
 
 import com.taylorgutierrez.kinalapp.entity.Producto;
-import com.taylorgutierrez.kinalapp.service.IProductoService;
-
-import org.springframework.beans.factory.annotation.Autowired;
+import com.taylorgutierrez.kinalapp.service.ProductoService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/productos")
 public class ProductoController {
 
-    @Autowired
-    private IProductoService productoService;
+    private final ProductoService productoService;
 
-    // 🔹 GET - Listar todos
+    // ✅ Usa la clase directamente, no la interfaz
+    public ProductoController(ProductoService productoService) {
+        this.productoService = productoService;
+    }
+
     @GetMapping
-    public List<Producto> listar() {
-        return productoService.listarProductos(); // ✔ tu método real
+    public ResponseEntity<List<Producto>> listarProductos() {
+        return ResponseEntity.ok(productoService.listarProductos());
     }
 
-    // 🔹 GET - Buscar por ID
     @GetMapping("/{id}")
-    public Optional<Producto> obtener(@PathVariable Long id) {
-        return productoService.buscarPorId(id); // ✔ devuelve Optional
+    public ResponseEntity<Producto> buscarPorId(@PathVariable Long id) {
+        return productoService.buscarPorId(id)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
     }
 
-    // 🔹 POST - Crear
     @PostMapping
-    public Producto guardar(@RequestBody Producto producto) {
-        return productoService.guardar(producto);
+    public ResponseEntity<Producto> guardar(@RequestBody Producto producto) {
+        return ResponseEntity.status(201).body(productoService.guardar(producto));
     }
 
-    // 🔹 PUT - Actualizar
     @PutMapping("/{id}")
-    public Producto actualizar(@PathVariable Long id, @RequestBody Producto producto) {
-        return productoService.actualizar(id, producto); // ✔ ya lo tienes en service
+    public ResponseEntity<?> actualizar(@PathVariable Long id, @RequestBody Producto producto) {
+        try {
+            if (!productoService.buscarPorId(id).isPresent()) {
+                return ResponseEntity.notFound().build();
+            }
+            producto.setIdProducto(id);
+            return ResponseEntity.ok(productoService.guardar(producto));
+        } catch (RuntimeException e) {
+            return ResponseEntity.notFound().build();
+        }
     }
 
-    // 🔹 DELETE - Eliminar
     @DeleteMapping("/{id}")
-    public void eliminar(@PathVariable Long id) {
+    public ResponseEntity<Void> eliminar(@PathVariable Long id) {
+        if (!productoService.buscarPorId(id).isPresent()) {
+            return ResponseEntity.notFound().build();
+        }
         productoService.eliminar(id);
-    }
-
-    // 🔹 GET - Buscar por stock
-    @GetMapping("/stock/{stock}")
-    public List<Producto> buscarPorStock(@PathVariable int stock) {
-        return productoService.buscarPorStock(stock);
+        return ResponseEntity.noContent().build();
     }
 }

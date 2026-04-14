@@ -8,11 +8,12 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/ventas")
+@RequestMapping("/api/ventas")
 public class VentaController {
 
     private final VentaService ventaService;
 
+    // ✅ Usa la clase directamente
     public VentaController(VentaService ventaService) {
         this.ventaService = ventaService;
     }
@@ -37,10 +38,11 @@ public class VentaController {
     @PutMapping("/{id}")
     public ResponseEntity<?> actualizar(@PathVariable Long id, @RequestBody Venta venta) {
         try {
-            if (!ventaService.existePorId(id)) {
+            if (!ventaService.buscarPorId(id).isPresent()) {
                 return ResponseEntity.notFound().build();
             }
-            return ResponseEntity.ok(ventaService.actualizar(id, venta));
+            venta.setIdVenta(id);
+            return ResponseEntity.ok(ventaService.guardar(venta));
         } catch (RuntimeException e) {
             return ResponseEntity.notFound().build();
         }
@@ -48,7 +50,7 @@ public class VentaController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> eliminar(@PathVariable Long id) {
-        if (!ventaService.existePorId(id)) {
+        if (!ventaService.buscarPorId(id).isPresent()) {
             return ResponseEntity.notFound().build();
         }
         ventaService.eliminar(id);
@@ -58,11 +60,9 @@ public class VentaController {
     @GetMapping("/usuario/{idUsuario}")
     public ResponseEntity<List<Venta>> buscarPorUsuario(@PathVariable Long idUsuario) {
         List<Venta> ventas = ventaService.buscarPorUsuario(idUsuario);
-
         if (ventas.isEmpty()) {
             return ResponseEntity.noContent().build();
         }
-
         return ResponseEntity.ok(ventas);
     }
 }

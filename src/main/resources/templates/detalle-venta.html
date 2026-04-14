@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Detalle Venta - KinalApp</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f5f5f5;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+        }
+        h1 { color: #667eea; }
+        .btn {
+            display: inline-block;
+            padding: 10px 15px;
+            background: #667eea;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            margin: 5px;
+        }
+        .btn-volver { background: #6c757d; }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background: #667eea;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1> Gestión de Detalle de Ventas</h1>
+    <a href="/" class="btn btn-volver">← Volver al inicio</a>
+    <a href="/api/detalle-venta" class="btn"> Ver API (JSON)</a>
+
+    <h3>Lista de Detalles de Venta</h3>
+
+    <table>
+        <thead>
+        <tr>
+            <th>ID Detalle</th>
+            <th>Venta ID</th>
+            <th>Producto</th>
+            <th>Cantidad</th>
+            <th>Precio</th>
+            <th>Subtotal</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="detalle : ${detalles}">
+            <td th:text="${detalle.idDetalle}">1</td>
+            <td th:text="${detalle.venta != null ? detalle.venta.idVenta : 'N/A'}">Venta ID</td>
+            <td th:text="${detalle.producto != null ? detalle.producto.nombre : 'N/A'}">Producto</td>
+            <td th:text="${detalle.cantidad}">0</td>
+            <td th:text="'Q' + ${detalle.precio}">0</td>
+            <td th:text="'Q' + ${detalle.cantidad * detalle.precio}">0</td>
+        </tr>
+        <tr th:if="${detalles.empty}">
+            <td colspan="6" style="text-align:center">No hay detalles de venta registrados</td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>
