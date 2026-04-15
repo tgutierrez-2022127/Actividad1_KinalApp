@@ -64,20 +64,12 @@
             border-radius: 12px;
             margin-bottom: 20px;
         }
-        .alert-error {
-            background: rgba(255, 71, 87, 0.2);
-            border: 1px solid #FF4757;
-            color: #FF6B6B;
-            padding: 12px;
-            border-radius: 12px;
-            margin-bottom: 20px;
-        }
     </style>
 </head>
 <body>
 <div class="container">
     <div class="header">
-        <h1> Gestión de Clientes</h1>
+        <h1> Gestion de Clientes</h1>
         <a href="/principal" class="btn">← Volver</a>
     </div>
 
@@ -86,9 +78,8 @@
     </div>
 
     <div class="table-container">
-        <h2 style="color: #FFD700; margin-bottom: 15px;">Listado de Clientes</h2>
+        <h2 style="color: #FFD700; margin-bottom: 15px;"> Listado de Clientes</h2>
         <div th:if="${exito}" class="alert-success" th:text="${exito}"></div>
-        <div th:if="${error}" class="alert-error" th:text="${error}"></div>
 
         <table>
             <thead>
@@ -96,7 +87,7 @@
                 <th>DPI</th>
                 <th>Nombre</th>
                 <th>Apellido</th>
-                <th>Dirección</th>
+                <th>Direccion</th>
                 <th>Estado</th>
                 <th>Acciones</th>
             </tr>
@@ -110,6 +101,7 @@
                 <td>
                     <span th:if="${cliente.estado == 1}" class="estado-activo">Activo</span>
                     <span th:if="${cliente.estado == 0}" class="estado-inactivo">Inactivo</span>
+                    <span th:if="${cliente.estado == null}" class="estado-inactivo">Inactivo</span>
                 </td>
                 <td>
                     <button class="btn" onclick="eliminarCliente('[[${cliente.dpiCliente}]]')">🗑️ Eliminar</button>
