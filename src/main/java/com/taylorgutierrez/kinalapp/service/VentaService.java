@@ -104,4 +104,4 @@ public class VentaService {
     public List<Venta> buscarPorProducto(Long idProducto) {
         return ventaRepository.findByProductoIdProducto(idProducto);
     }
-}"// Actualizacion 1" 
+}

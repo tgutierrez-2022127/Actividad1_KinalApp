@@ -65,8 +65,11 @@ public class ClienteService implements IClienteService {
      */
     @Override
     public Cliente guardar(Cliente cliente) {
-        validarCliente(cliente);              // Validamos los datos antes de guardar
-        return clienteRepository.save(cliente); // save() guarda o actualiza
+
+        if (cliente.getEstado() != 0 && cliente.getEstado() != 1) {
+            cliente.setEstado(1);
+        }
+        return clienteRepository.save(cliente);
     }
 
     /**
@@ -193,4 +196,4 @@ public class ClienteService implements IClienteService {
         // TODO: Implementar este método
         return List.of();
     }
-}"// Actualizacion 1" 
+}

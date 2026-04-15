@@ -15,4 +15,4 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
     boolean existsByCorreo(String correo);
 
     List<Usuario> findByEstado(Integer estado);
-}"// Actualizacion 1" 
+}

@@ -56,6 +56,22 @@
         .btn-group { display: flex; gap: 15px; margin-bottom: 20px; flex-wrap: wrap; }
         .estado-activo { color: #05DFA0; }
         .estado-inactivo { color: #FF4757; }
+        .alert-success {
+            background: rgba(5, 223, 160, 0.2);
+            border: 1px solid #05DFA0;
+            color: #05DFA0;
+            padding: 12px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+        }
+        .alert-error {
+            background: rgba(255, 71, 87, 0.2);
+            border: 1px solid #FF4757;
+            color: #FF6B6B;
+            padding: 12px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+        }
     </style>
 </head>
 <body>
@@ -70,9 +86,9 @@
     </div>
 
     <div class="table-container">
-        <h2 style="color: #FFD700; margin-bottom: 15px;"> Listado de Clientes</h2>
-        <div th:if="${exito}" style="background: rgba(5,223,160,0.2); border: 1px solid #05DFA0; color: #05DFA0; padding: 12px; border-radius: 12px; margin-bottom: 20px;" th:text="${exito}"></div>
-        <div th:if="${error}" style="background: rgba(255,71,87,0.2); border: 1px solid #FF4757; color: #FF6B6B; padding: 12px; border-radius: 12px; margin-bottom: 20px;" th:text="${error}"></div>
+        <h2 style="color: #FFD700; margin-bottom: 15px;">Listado de Clientes</h2>
+        <div th:if="${exito}" class="alert-success" th:text="${exito}"></div>
+        <div th:if="${error}" class="alert-error" th:text="${error}"></div>
 
         <table>
             <thead>
@@ -123,4 +139,4 @@
     }
 </script>
 </body>
-</html>"<!-- Actualizacion 1 -->" 
+</html>

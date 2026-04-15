@@ -29,4 +29,4 @@ public class DetalleVentaService {
     public void eliminar(Long id) {
         detalleVentaRepository.deleteById(id);
     }
-}"// Actualizacion 1" 
+}

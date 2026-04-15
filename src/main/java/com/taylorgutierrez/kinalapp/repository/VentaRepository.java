@@ -22,4 +22,4 @@ public interface VentaRepository extends JpaRepository<Venta, Long> {
 
     // Nuevo: buscar ventas por producto
     List<Venta> findByProductoIdProducto(Long idProducto);
-}"// Actualizacion 1" 
+}
