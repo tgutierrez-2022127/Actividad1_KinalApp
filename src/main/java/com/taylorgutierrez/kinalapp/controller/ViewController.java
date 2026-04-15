@@ -91,4 +91,4 @@ public class ViewController {
         model.addAttribute("detalles", detalleVentaService.listarDetalles());
         return "detalle-venta";
     }
-}
+}"// Actualizacion 1" 
