@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="es">
+<html xmlns:th="http://www.thymeleaf.org" lang="es"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -45,9 +46,8 @@
         }
 
         .logo-img {
-            height: 70px;
+            height: 50px;
             width: auto;
-            filter: drop-shadow(0 0 10px rgba(255, 215, 0, 0.3));
         }
 
         .logo-text {
@@ -55,13 +55,16 @@
             -webkit-background-clip: text;
             background-clip: text;
             color: transparent;
-            font-size: 1.8rem;
+            font-size: 1.5rem;
             font-weight: 700;
         }
 
-        .welcome {
-            color: rgba(255, 255, 255, 0.6);
-            font-size: 0.85rem;
+        .rol-badge {
+            background: rgba(255, 215, 0, 0.2);
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            color: #FFD700;
         }
 
         .btn-logout {
@@ -72,13 +75,11 @@
             border-radius: 12px;
             cursor: pointer;
             transition: all 0.3s;
-            font-weight: 500;
         }
 
         .btn-logout:hover {
             background: #ff4757;
             color: white;
-            transform: translateY(-2px);
         }
 
         .stats {
@@ -89,8 +90,9 @@
         }
 
         .stat-card {
-            background: rgba(255, 215, 0, 0.1);
-            border-radius: 15px;
+            background: rgba(26, 26, 46, 0.9);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
             padding: 20px;
             text-align: center;
             border: 1px solid rgba(255, 215, 0, 0.2);
@@ -122,14 +124,13 @@
             text-decoration: none;
             transition: all 0.4s;
             border: 1px solid rgba(255, 215, 0, 0.2);
-            cursor: pointer;
             display: block;
         }
 
         .card:hover {
             transform: translateY(-10px);
             border-color: rgba(255, 215, 0, 0.6);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3), 0 0 20px rgba(255, 215, 0, 0.2);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
         }
 
         .card-icon {
@@ -147,6 +148,15 @@
             color: rgba(255, 255, 255, 0.6);
             font-size: 0.9rem;
         }
+
+        .admin-badge {
+            background: #ff4757;
+            color: white;
+            padding: 2px 10px;
+            border-radius: 15px;
+            font-size: 0.7rem;
+            margin-left: 10px;
+        }
     </style>
 </head>
 <body>
@@ -156,7 +166,8 @@
             <img src="/images/Kinal.png" alt="KinalApp" class="logo-img" onerror="this.style.display='none'">
             <div>
                 <div class="logo-text">KinalApp</div>
-                <p class="welcome">Bienvenido, Administrador</p>
+                <p class="rol-badge" sec:authorize="hasRole('ADMIN')">Administrador</p>
+                <p class="rol-badge" sec:authorize="hasRole('CLIENTE')">Cliente</p>
             </div>
         </div>
         <form action="/logout" method="post">
@@ -164,6 +175,7 @@
         </form>
     </div>
 
+    <!-- Estadisticas -->
     <div class="stats">
         <div class="stat-card">
             <div class="stat-number" id="totalClientes">0</div>
@@ -184,17 +196,23 @@
             <div class="card-icon"></div>
             <h2>Clientes</h2>
             <p>Gestionar informacion de clientes</p>
+            <span sec:authorize="hasRole('ADMIN')" class="admin-badge">Admin</span>
         </a>
+
         <a href="/productos-view" class="card">
             <div class="card-icon"></div>
             <h2>Productos</h2>
             <p>Administrar inventario y precios</p>
+            <span sec:authorize="hasRole('ADMIN')" class="admin-badge">Admin</span>
         </a>
-        <a href="/ventas-view" class="card">
+
+        <!-- NUEVA TARJETA DE VENTAS - con enlace correcto -->
+        <a href="/ventas" class="card">
             <div class="card-icon"></div>
             <h2>Ventas</h2>
             <p>Registrar y consultar ventas</p>
         </a>
+
         <a href="/detalle-venta-view" class="card">
             <div class="card-icon"></div>
             <h2>Detalle Ventas</h2>
@@ -204,20 +222,23 @@
 </div>
 
 <script>
-    fetch('/api/clientes')
-        .then(res => res.json())
-        .then(data => document.getElementById('totalClientes').innerText = data.length)
-        .catch(e => console.log('No hay clientes'));
+    function cargarEstadisticas() {
+        fetch('/api/clientes')
+            .then(res => res.json())
+            .then(data => document.getElementById('totalClientes').innerText = data.length)
+            .catch(e => document.getElementById('totalClientes').innerText = '0');
 
-    fetch('/api/productos')
-        .then(res => res.json())
-        .then(data => document.getElementById('totalProductos').innerText = data.length)
-        .catch(e => console.log('No hay productos'));
+        fetch('/api/productos')
+            .then(res => res.json())
+            .then(data => document.getElementById('totalProductos').innerText = data.length)
+            .catch(e => document.getElementById('totalProductos').innerText = '0');
 
-    fetch('/api/ventas')
-        .then(res => res.json())
-        .then(data => document.getElementById('totalVentas').innerText = data.length)
-        .catch(e => console.log('No hay ventas'));
+        fetch('/api/ventas')
+            .then(res => res.json())
+            .then(data => document.getElementById('totalVentas').innerText = data.length)
+            .catch(e => document.getElementById('totalVentas').innerText = '0');
+    }
+    cargarEstadisticas();
 </script>
 </body>
 </html>

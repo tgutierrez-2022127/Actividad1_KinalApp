@@ -26,18 +26,26 @@ public class Usuario {
     @Column
     private int estado;
 
+
+    @Column(name = "rol")
+    private String rol;  // "ADMIN" o "CLIENTE"
+
+    // Constructor vacio
     public Usuario() {
     }
 
-    public Usuario(Long idUsuario, String nombre, String apellido, String correo, String password, int estado) {
+    // Constructor completo
+    public Usuario(Long idUsuario, String nombre, String apellido, String correo, String password, int estado, String rol) {
         this.idUsuario = idUsuario;
         this.nombre = nombre;
         this.apellido = apellido;
         this.correo = correo;
         this.password = password;
         this.estado = estado;
+        this.rol = rol;
     }
 
+    // Getters y Setters
     public Long getIdUsuario() {
         return idUsuario;
     }
@@ -84,5 +92,13 @@ public class Usuario {
 
     public void setEstado(int estado) {
         this.estado = estado;
+    }
+
+    public String getRol() {
+        return rol;
+    }
+
+    public void setRol(String rol) {
+        this.rol = rol;
     }
 }

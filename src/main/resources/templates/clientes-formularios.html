@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Nuevo Cliente</title>
+</head>
+<body>
+<h1>Nuevo Cliente</h1>
+<form action="/clientes/guardar" method="post">
+    <input type="text" name="dpiCliente" placeholder="DPI" required><br>
+    <input type="text" name="nombreCliente" placeholder="Nombre" required><br>
+    <input type="text" name="apellidoCliente" placeholder="Apellido" required><br>
+    <input type="text" name="direccion" placeholder="Direccion" required><br>
+    <button type="submit">Guardar</button>
+</form>
+<a href="/clientes-view">Cancelar</a>
+</body>
+</html>

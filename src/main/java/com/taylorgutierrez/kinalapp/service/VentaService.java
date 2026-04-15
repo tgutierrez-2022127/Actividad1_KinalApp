@@ -4,54 +4,104 @@ import com.taylorgutierrez.kinalapp.entity.Venta;
 import com.taylorgutierrez.kinalapp.repository.VentaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
+import java.util.Random;
 
 @Service
+@Transactional
 public class VentaService {
 
     @Autowired
     private VentaRepository ventaRepository;
 
-    //  Método para listar todas las ventas
+    // Generar codigo generico unico
+    private String generarCodigoGenerico() {
+        String fecha = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd"));
+        String random = String.format("%04d", new Random().nextInt(9999));
+        String codigo = "VENTA-" + fecha + "-" + random;
+
+        while (ventaRepository.existsByCodigoGenerico(codigo)) {
+            random = String.format("%04d", new Random().nextInt(9999));
+            codigo = "VENTA-" + fecha + "-" + random;
+        }
+        return codigo;
+    }
+
     public List<Venta> listarVentas() {
         return ventaRepository.findAll();
     }
 
-    //  Método para buscar por ID
     public Optional<Venta> buscarPorId(Long id) {
         return ventaRepository.findById(id);
     }
 
-    //  Método para verificar si existe por ID
-    public boolean existePorId(Long id) {
-        return ventaRepository.existsById(id);
+    public Optional<Venta> buscarPorCodigoGenerico(String codigo) {
+        return ventaRepository.findByCodigoGenerico(codigo);
     }
 
-    //  Método para guardar una venta
     public Venta guardar(Venta venta) {
+        // Generar codigo si no tiene
+        if (venta.getCodigoGenerico() == null || venta.getCodigoGenerico().isEmpty()) {
+            venta.setCodigoGenerico(generarCodigoGenerico());
+        }
+        // Fecha actual si no tiene
+        if (venta.getFecha() == null) {
+            venta.setFecha(LocalDateTime.now());
+        }
+        // Estado por defecto
+        if (venta.getEstado() == null || venta.getEstado().isEmpty()) {
+            venta.setEstado("PENDIENTE");
+        }
+        // Calcular total
+        venta.calcularTotal();
+
         return ventaRepository.save(venta);
     }
 
-    //  Método para actualizar una venta
     public Venta actualizar(Long id, Venta ventaActualizada) {
         Venta ventaExistente = ventaRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Venta no encontrada"));
 
         ventaExistente.setFecha(ventaActualizada.getFecha());
+        ventaExistente.setTotal(ventaActualizada.getTotal());
+        ventaExistente.setEstado(ventaActualizada.getEstado());
+        ventaExistente.setCantidad(ventaActualizada.getCantidad());
+        ventaExistente.setPrecioUnitario(ventaActualizada.getPrecioUnitario());
+        ventaExistente.setCliente(ventaActualizada.getCliente());
         ventaExistente.setUsuario(ventaActualizada.getUsuario());
+        ventaExistente.setProducto(ventaActualizada.getProducto());
+
+        ventaExistente.calcularTotal();
 
         return ventaRepository.save(ventaExistente);
     }
 
-    //  Método para eliminar una venta
     public void eliminar(Long id) {
         ventaRepository.deleteById(id);
     }
 
-    // Método para buscar ventas por usuario
+    public boolean existePorId(Long id) {
+        return ventaRepository.existsById(id);
+    }
+
+    public List<Venta> buscarPorEstado(String estado) {
+        return ventaRepository.findByEstado(estado);
+    }
+
+    public List<Venta> buscarPorCliente(String dpiCliente) {
+        return ventaRepository.findByClienteDpiCliente(dpiCliente);
+    }
+
     public List<Venta> buscarPorUsuario(Long idUsuario) {
         return ventaRepository.findByUsuarioIdUsuario(idUsuario);
+    }
+
+    public List<Venta> buscarPorProducto(Long idProducto) {
+        return ventaRepository.findByProductoIdProducto(idProducto);
     }
 }

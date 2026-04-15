@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Listado de Ventas</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #1A1A2E 0%, #16213E 50%, #0F3460 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .header {
+            background: rgba(26, 26, 46, 0.9);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 20px 30px;
+            margin-bottom: 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            border: 1px solid rgba(255, 215, 0, 0.3);
+        }
+
+        h1 {
+            color: #FFD700;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            transition: all 0.3s;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #FFD700, #FFA500);
+            color: #1A1A2E;
+            font-weight: bold;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 215, 0, 0.3);
+        }
+
+        .btn-back {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border: 1px solid rgba(255, 215, 0, 0.3);
+        }
+
+        .btn-back:hover {
+            background: rgba(255, 215, 0, 0.2);
+        }
+
+        .table-container {
+            background: rgba(26, 26, 46, 0.9);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 20px;
+            border: 1px solid rgba(255, 215, 0, 0.2);
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th {
+            text-align: left;
+            padding: 15px;
+            color: #FFD700;
+            border-bottom: 1px solid rgba(255, 215, 0, 0.3);
+        }
+
+        td {
+            padding: 12px 15px;
+            color: rgba(255, 255, 255, 0.8);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        tr:hover {
+            background: rgba(255, 215, 0, 0.1);
+        }
+
+        .estado-pendiente {
+            color: #F59E0B;
+        }
+
+        .estado-pagado {
+            color: #05DFA0;
+        }
+
+        .estado-cancelado {
+            color: #FF4757;
+        }
+
+        .alert-success {
+            background: rgba(5, 223, 160, 0.2);
+            border: 1px solid #05DFA0;
+            color: #05DFA0;
+            padding: 12px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+        }
+
+        .alert-error {
+            background: rgba(255, 71, 87, 0.2);
+            border: 1px solid #FF4757;
+            color: #FF6B6B;
+            padding: 12px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <h1> Listado de Ventas</h1>
+        <div>
+            <a href="/principal" class="btn btn-back">← Volver</a>
+            <a href="/ventas/nuevo" class="btn btn-primary" style="margin-left: 10px;">➕ Nueva Venta</a>
+        </div>
+    </div>
+
+    <div th:if="${exito}" class="alert-success" th:text="${exito}"></div>
+    <div th:if="${error}" class="alert-error" th:text="${error}"></div>
+
+    <div class="table-container">
+        <table>
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Codigo</th>
+                <th>Fecha</th>
+                <th>Cliente</th>
+                <th>Total</th>
+                <th>Estado</th>
+                <th>Usuario</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="venta : ${ventas}">
+                <td th:text="${venta.idVenta}">-</td>
+                <td th:text="${venta.codigoGenerico}">-</td>
+                <td th:text="${#temporals.format(venta.fecha, 'dd/MM/yyyy HH:mm')}">-</td>
+                <td th:text="${venta.cliente != null ? venta.cliente.nombreCliente + ' ' + venta.cliente.apellidoCliente : 'N/A'}">-</td>
+                <td th:text="'Q' + ${venta.total}">-</td>
+                <td>
+                            <span th:class="${venta.estado == 'PENDIENTE' ? 'estado-pendiente' : (venta.estado == 'PAGADO' ? 'estado-pagado' : 'estado-cancelado')}"
+                                  th:text="${venta.estado}">-</span>
+                </td>
+                <td th:text="${venta.usuario != null ? venta.usuario.nombre : 'N/A'}">-</td>
+            </tr>
+            <tr th:if="${ventas.empty}">
+                <td colspan="7" style="text-align: center;">No hay ventas registradas</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+</body>
+</html>

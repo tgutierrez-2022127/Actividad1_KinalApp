@@ -2,21 +2,20 @@ package com.taylorgutierrez.kinalapp.controller;
 
 import com.taylorgutierrez.kinalapp.entity.Venta;
 import com.taylorgutierrez.kinalapp.service.VentaService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/ventas")
 public class VentaController {
 
-    private final VentaService ventaService;
-
-    // ✅ Usa la clase directamente
-    public VentaController(VentaService ventaService) {
-        this.ventaService = ventaService;
-    }
+    @Autowired
+    private VentaService ventaService;
 
     @GetMapping
     public ResponseEntity<List<Venta>> listarVentas() {
@@ -25,44 +24,29 @@ public class VentaController {
 
     @GetMapping("/{id}")
     public ResponseEntity<Venta> buscarPorId(@PathVariable Long id) {
-        return ventaService.buscarPorId(id)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+        Optional<Venta> venta = ventaService.buscarPorId(id);
+        return venta.map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build());
     }
 
     @PostMapping
     public ResponseEntity<Venta> guardar(@RequestBody Venta venta) {
-        return ResponseEntity.status(201).body(ventaService.guardar(venta));
+        return ResponseEntity.status(HttpStatus.CREATED).body(ventaService.guardar(venta));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> actualizar(@PathVariable Long id, @RequestBody Venta venta) {
-        try {
-            if (!ventaService.buscarPorId(id).isPresent()) {
-                return ResponseEntity.notFound().build();
-            }
-            venta.setIdVenta(id);
-            return ResponseEntity.ok(ventaService.guardar(venta));
-        } catch (RuntimeException e) {
+    public ResponseEntity<Venta> actualizar(@PathVariable Long id, @RequestBody Venta venta) {
+        if (!ventaService.existePorId(id)) {
             return ResponseEntity.notFound().build();
         }
+        return ResponseEntity.ok(ventaService.actualizar(id, venta));
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> eliminar(@PathVariable Long id) {
-        if (!ventaService.buscarPorId(id).isPresent()) {
+        if (!ventaService.existePorId(id)) {
             return ResponseEntity.notFound().build();
         }
         ventaService.eliminar(id);
         return ResponseEntity.noContent().build();
-    }
-
-    @GetMapping("/usuario/{idUsuario}")
-    public ResponseEntity<List<Venta>> buscarPorUsuario(@PathVariable Long idUsuario) {
-        List<Venta> ventas = ventaService.buscarPorUsuario(idUsuario);
-        if (ventas.isEmpty()) {
-            return ResponseEntity.noContent().build();
-        }
-        return ResponseEntity.ok(ventas);
     }
 }
