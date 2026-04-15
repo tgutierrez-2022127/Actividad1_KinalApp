@@ -49,4 +49,4 @@ public class VentaController {
         ventaService.eliminar(id);
         return ResponseEntity.noContent().build();
     }
-}
+}"// Actualizacion 1" 
