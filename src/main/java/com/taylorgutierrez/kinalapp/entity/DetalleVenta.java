@@ -61,4 +61,4 @@ public class DetalleVenta {
     public void setPrecio(double precio) {
         this.precio = precio;
     }
-}
+}"// Actualizacion 1" 
