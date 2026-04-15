@@ -9,3 +9,4 @@ public interface ProductoRepository extends JpaRepository<Producto, Long> {
     List<Producto> findByStock(int stock);
 
 }
+"// Actualizacion 1" 
