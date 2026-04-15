@@ -3,8 +3,6 @@ package com.taylorgutierrez.kinalapp.controller;
 import com.taylorgutierrez.kinalapp.entity.DetalleVenta;
 import com.taylorgutierrez.kinalapp.service.DetalleVentaService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -17,18 +15,17 @@ public class DetalleVentaController {
     private DetalleVentaService detalleVentaService;
 
     @GetMapping
-    public ResponseEntity<List<DetalleVenta>> listarDetalles() {
-        return ResponseEntity.ok(detalleVentaService.listarDetalles());
+    public List<DetalleVenta> listarDetalles() {
+        return detalleVentaService.listarDetalles();
     }
 
     @PostMapping
-    public ResponseEntity<DetalleVenta> guardar(@RequestBody DetalleVenta detalleVenta) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(detalleVentaService.guardar(detalleVenta));
+    public DetalleVenta guardar(@RequestBody DetalleVenta detalleVenta) {
+        return detalleVentaService.guardar(detalleVenta);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> eliminar(@PathVariable Long id) {
+    public void eliminar(@PathVariable Long id) {
         detalleVentaService.eliminar(id);
-        return ResponseEntity.noContent().build();
     }
 }
