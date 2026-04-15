@@ -1,5 +1,6 @@
 package com.taylorgutierrez.kinalapp.service;
 
+import com.taylorgutierrez.kinalapp.entity.DetalleVenta;
 import com.taylorgutierrez.kinalapp.entity.Venta;
 import com.taylorgutierrez.kinalapp.repository.VentaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +19,9 @@ public class VentaService {
 
     @Autowired
     private VentaRepository ventaRepository;
+
+    @Autowired
+    private DetalleVentaService detalleVentaService;
 
     // Generar codigo generico unico
     private String generarCodigoGenerico() {
@@ -60,7 +64,20 @@ public class VentaService {
         // Calcular total
         venta.calcularTotal();
 
-        return ventaRepository.save(venta);
+        // Guardar la venta
+        Venta ventaGuardada = ventaRepository.save(venta);
+
+
+        if (venta.getProducto() != null && venta.getCantidad() != null && venta.getPrecioUnitario() != null) {
+            DetalleVenta detalle = new DetalleVenta();
+            detalle.setCantidad(venta.getCantidad());
+            detalle.setPrecio(venta.getPrecioUnitario());
+            detalle.setProducto(venta.getProducto());
+            detalle.setVenta(ventaGuardada);
+            detalleVentaService.guardar(detalle);
+        }
+
+        return ventaGuardada;
     }
 
     public Venta actualizar(Long id, Venta ventaActualizada) {
