@@ -10,4 +10,4 @@ public interface DetalleVentaRepository extends JpaRepository<DetalleVenta, Long
     // Buscar detalles por venta
     List<DetalleVenta> findByVenta_IdVenta(Long idVenta);
 
-}
+}"// Actualizacion 1" 
