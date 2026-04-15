@@ -80,4 +80,4 @@ Todos los endpoints fueron probados con Postman correctamente.
 
 ## Autor
 
-Taylor Gutierrez
+Taylor Gutierrez"" 
