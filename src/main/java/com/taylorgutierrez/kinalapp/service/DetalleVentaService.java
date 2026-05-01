@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class DetalleVentaService {
@@ -18,13 +17,10 @@ public class DetalleVentaService {
         return detalleVentaRepository.findAll();
     }
 
-    public Optional<DetalleVenta> buscarPorId(Long id) {
-        return detalleVentaRepository.findById(id);
+    public DetalleVenta guardar(DetalleVenta detalle) {
+        return detalleVentaRepository.save(detalle);
     }
 
-    public DetalleVenta guardar(DetalleVenta detalleVenta) {
-        return detalleVentaRepository.save(detalleVenta);
-    }
 
     public void eliminar(Long id) {
         detalleVentaRepository.deleteById(id);

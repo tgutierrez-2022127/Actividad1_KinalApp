@@ -2,7 +2,12 @@
 <html xmlns:th="http://www.thymeleaf.org" lang="es">
 <head>
     <meta charset="UTF-8">
+<<<<<<< HEAD
     <title>Detalle de Ventas</title>
+=======
+    <title>Detalle Venta</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+>>>>>>> 6a6303095c6c461622b30ba3294c02aba83013e9
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
@@ -33,6 +38,10 @@
             border: 1px solid rgba(255,215,0,0.3);
             cursor: pointer;
         }
+<<<<<<< HEAD
+=======
+        .btn:hover { background: rgba(255,215,0,0.2); }
+>>>>>>> 6a6303095c6c461622b30ba3294c02aba83013e9
         .table-container {
             background: rgba(26, 26, 46, 0.9);
             backdrop-filter: blur(10px);
@@ -52,21 +61,36 @@
             margin-bottom: 30px;
         }
         .stat-card {
+<<<<<<< HEAD
             background: rgba(26, 26, 46, 0.9);
+=======
+            background: rgba(26,26,46,0.9);
+>>>>>>> 6a6303095c6c461622b30ba3294c02aba83013e9
             backdrop-filter: blur(10px);
             border-radius: 20px;
             padding: 20px;
             text-align: center;
+<<<<<<< HEAD
             border: 1px solid rgba(255, 215, 0, 0.2);
         }
         .stat-number { font-size: 2rem; font-weight: 700; color: #FFD700; }
         .stat-label { color: rgba(255, 255, 255, 0.6); font-size: 0.8rem; }
+=======
+            border: 1px solid rgba(255,215,0,0.2);
+        }
+        .stat-number { font-size: 2rem; font-weight: 700; color: #FFD700; }
+        .stat-label { color: rgba(255,255,255,0.6); font-size: 0.8rem; }
+>>>>>>> 6a6303095c6c461622b30ba3294c02aba83013e9
     </style>
 </head>
 <body>
 <div class="container">
     <div class="header">
+<<<<<<< HEAD
         <h1>📋 Detalle de Ventas</h1>
+=======
+        <h1> Detalle de Ventas</h1>
+>>>>>>> 6a6303095c6c461622b30ba3294c02aba83013e9
         <a href="/principal" class="btn">← Volver</a>
     </div>
 
@@ -86,7 +110,11 @@
     </div>
 
     <div class="table-container">
+<<<<<<< HEAD
         <h2 style="color: #FFD700; margin-bottom: 15px;">📋 Listado de Detalles de Venta</h2>
+=======
+        <h2 style="color: #FFD700; margin-bottom: 15px;"> Listado de Detalles de Venta</h2>
+>>>>>>> 6a6303095c6c461622b30ba3294c02aba83013e9
         <table>
             <thead>
             <tr>
@@ -99,6 +127,7 @@
             </tr>
             </thead>
             <tbody>
+<<<<<<< HEAD
             <tr th:each="d : ${detalles}">
                 <td th:text="${d.idDetalle}">-</td>
                 <td th:text="${d.venta != null ? d.venta.idVenta : 'N/A'}">-</td>
@@ -109,6 +138,20 @@
             </tr>
             <tr th:if="${detalles.empty}">
                 <td colspan="6" style="text-align:center">No hay detalles de venta registrados</td>
+=======
+            <tr th:each="detalle : ${detalles}">
+                <td th:text="${detalle.idDetalle}">-</td>
+                <td th:text="${detalle.venta != null ? detalle.venta.idVenta : 'N/A'}">-</td>
+                <td th:text="${detalle.venta != null ? detalle.venta.codigoGenerico : 'N/A'}">-</td>
+                <td th:text="${detalle.producto != null ? detalle.producto.nombre : 'N/A'}">-</td>
+                <td th:text="${detalle.cantidad}">0</td>
+                <td th:text="'Q' + ${detalle.precio}">-</td>
+                <td th:text="'Q' + ${detalle.cantidad * detalle.precio}">-</td>
+                <td th:text="${detalle.venta != null ? #temporals.format(detalle.venta.fecha, 'dd/MM/yyyy') : 'N/A'}">-</td>
+            </tr>
+            <tr th:if="${detalles.empty}">
+                <td colspan="8" style="text-align:center">No hay detalles de venta registrados</td>
+>>>>>>> 6a6303095c6c461622b30ba3294c02aba83013e9
             </tr>
             </tbody>
         </table>
@@ -117,6 +160,7 @@
 
 <script>
     fetch('/api/detalle-venta')
+<<<<<<< HEAD
         .then(r=>r.json())
         .then(data => {
             document.getElementById('totalDetalles').innerText = data.length;
@@ -127,6 +171,19 @@
             });
             document.getElementById('totalProductosVendidos').innerText = productos;
             document.getElementById('totalIngresos').innerText = 'Q' + ingresos.toFixed(2);
+=======
+        .then(res => res.json())
+        .then(data => {
+            document.getElementById('totalDetalles').innerText = data.length;
+            let totalProductos = 0;
+            let totalIngresos = 0;
+            data.forEach(d => {
+                totalProductos += d.cantidad || 0;
+                totalIngresos += (d.cantidad || 0) * (d.precio || 0);
+            });
+            document.getElementById('totalProductosVendidos').innerText = totalProductos;
+            document.getElementById('totalIngresos').innerText = 'Q' + totalIngresos.toFixed(2);
+>>>>>>> 6a6303095c6c461622b30ba3294c02aba83013e9
         })
         .catch(e => console.log('No hay detalles'));
 </script>

@@ -19,12 +19,27 @@
             background: rgba(26, 26, 46, 0.9);
             backdrop-filter: blur(10px);
             border-radius: 30px;
-            padding: 50px;
+            padding: 40px;
             width: 100%;
-            max-width: 450px;
+            max-width: 420px;
             border: 1px solid rgba(255, 215, 0, 0.3);
+<<<<<<< HEAD
             box-shadow: 0 25px 50px rgba(0,0,0,0.3);
         }
+=======
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
+            text-align: center;
+        }
+
+        .logo-img {
+            width: 100px;
+            height: 100px;
+            object-fit: contain;
+            margin-bottom: 20px;
+            filter: drop-shadow(0 0 10px rgba(255, 215, 0, 0.5));
+        }
+
+>>>>>>> 6a6303095c6c461622b30ba3294c02aba83013e9
         .logo-text {
             text-align: center;
             font-size: 2rem;
@@ -36,12 +51,33 @@
             margin-bottom: 10px;
         }
         .subtitle {
+<<<<<<< HEAD
             text-align: center;
             color: rgba(255,255,255,0.6);
             margin-bottom: 30px;
         }
         .form-group { margin-bottom: 20px; }
         label { display: block; margin-bottom: 8px; color: #FFD700; }
+=======
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 0.85rem;
+            margin-bottom: 30px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #FFD700;
+            font-weight: 500;
+            font-size: 0.85rem;
+        }
+
+>>>>>>> 6a6303095c6c461622b30ba3294c02aba83013e9
         input {
             width: 100%;
             padding: 15px;
@@ -77,8 +113,14 @@
 </head>
 <body>
 <div class="login-container">
+<<<<<<< HEAD
     <div class="logo-text"> KinalApp</div>
     <p class="subtitle">Sistema de Gestión Empresarial</p>
+=======
+    <img src="/images/Kinal.png" alt="KinalApp" class="logo-img" onerror="this.style.display='none'">
+    <div class="logo-text">KinalApp</div>
+    <p class="subtitle">Sistema de Gestion Empresarial</p>
+>>>>>>> 6a6303095c6c461622b30ba3294c02aba83013e9
 
     <div th:if="${param.error}" class="error-message">
          Usuario o contraseña incorrectos
@@ -102,8 +144,15 @@
         <button type="submit" class="btn"> Ingresar al Sistema</button>
     </form>
 
+<<<<<<< HEAD
     <div class="register-link">
         <a th:href="@{/registro}"> ¿No tienes cuenta? Regístrate aquí</a>
+=======
+    <a href="/registro" class="btn-registro">Crear Cuenta</a>
+
+    <div class="credentials">
+        <p>Usuario: <span>admin@kinal.com</span> | Contrasena: <span>admin123</span></p>
+>>>>>>> 6a6303095c6c461622b30ba3294c02aba83013e9
     </div>
 </div>
 </body>
