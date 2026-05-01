@@ -2,7 +2,6 @@
 <html xmlns:th="http://www.thymeleaf.org" lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>KinalApp - Productos</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
@@ -11,164 +10,85 @@
             font-family: 'Poppins', sans-serif;
             background: linear-gradient(135deg, #1A1A2E 0%, #16213E 50%, #0F3460 100%);
             min-height: 100vh;
-            padding: 20px;
         }
-        .container { max-width: 1400px; margin: 0 auto; }
-        .header {
-            background: rgba(26, 26, 46, 0.9);
+        .navbar {
+            background: rgba(26, 26, 46, 0.95);
             backdrop-filter: blur(10px);
-            border-radius: 20px;
-            padding: 20px 30px;
-            margin-bottom: 30px;
+            padding: 15px 30px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            border: 1px solid rgba(255, 215, 0, 0.3);
+            border-bottom: 1px solid rgba(255, 215, 0, 0.3);
         }
-        h1 { color: #FFD700; }
-        .btn {
-            padding: 10px 20px;
-            border-radius: 12px;
-            text-decoration: none;
-            background: rgba(255,255,255,0.1);
-            color: white;
-            border: 1px solid rgba(255,215,0,0.3);
-            cursor: pointer;
-        }
-        .btn:hover { background: rgba(255,215,0,0.2); }
-        .btn-primary {
+        .navbar h2 {
             background: linear-gradient(135deg, #FFD700, #FFA500);
-            color: #1A1A2E;
-            border: none;
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
         }
-        .table-container {
-            background: rgba(26, 26, 46, 0.9);
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            margin-left: 25px;
+            padding: 8px 15px;
+            border-radius: 10px;
+        }
+        .nav-links a:hover { background: rgba(255, 215, 0, 0.2); color: #FFD700; }
+        .container { max-width: 1200px; margin: 40px auto; padding: 20px; }
+        .card {
+            background: rgba(26, 26, 46, 0.8);
             backdrop-filter: blur(10px);
             border-radius: 20px;
-            padding: 20px;
-            border: 1px solid rgba(255, 215, 0, 0.2);
-            overflow-x: auto;
+            padding: 25px;
+            border: 1px solid rgba(255, 215, 0, 0.3);
         }
-        table { width: 100%; border-collapse: collapse; }
-        th { text-align: left; padding: 15px; color: #FFD700; border-bottom: 1px solid rgba(255,215,0,0.3); }
-        td { padding: 12px 15px; color: rgba(255,255,255,0.8); border-bottom: 1px solid rgba(255,255,255,0.1); }
-        tr:hover { background: rgba(255,215,0,0.1); }
-        .btn-group { display: flex; gap: 15px; margin-bottom: 20px; flex-wrap: wrap; }
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.8);
-            backdrop-filter: blur(5px);
-            z-index: 1000;
-            justify-content: center;
-            align-items: center;
-        }
-        .modal-content {
-            background: #1A1A2E;
-            border-radius: 20px;
-            padding: 30px;
-            width: 90%;
-            max-width: 500px;
-            border: 1px solid #FFD700;
-        }
-        .modal-content h2 { color: #FFD700; margin-bottom: 20px; }
-        .modal-content input {
-            width: 100%;
-            padding: 12px;
-            margin-bottom: 15px;
-            background: rgba(255,255,255,0.1);
-            border: 1px solid rgba(255,215,0,0.3);
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            background: linear-gradient(135deg, #FFD700, #FFA500);
+            color: #1A1A2E;
+            text-decoration: none;
             border-radius: 10px;
-            color: white;
+            font-weight: 600;
+            margin-bottom: 20px;
         }
-        .modal-content button {
-            width: 100%;
-            padding: 12px;
-            background: #FFD700;
-            border: none;
-            border-radius: 10px;
-            font-weight: bold;
-            cursor: pointer;
-        }
-        .close { float: right; font-size: 28px; cursor: pointer; color: #FFD700; }
+        table { width: 100%; border-collapse: collapse; color: white; }
+        th, td { padding: 12px; text-align: left; border-bottom: 1px solid rgba(255, 215, 0, 0.2); }
+        th { color: #FFD700; }
+        a { color: #FFD700; text-decoration: none; }
     </style>
 </head>
 <body>
+<div class="navbar">
+    <h2> KinalApp</h2>
+    <div class="nav-links">
+        <a th:href="@{/clientes}">Clientes</a>
+        <a th:href="@{/ventas}">Ventas</a>
+        <a th:href="@{/productos}">Productos</a>
+        <a th:href="@{/logout}">Cerrar Sesión</a>
+    </div>
+</div>
 <div class="container">
-    <div class="header">
-        <h1>Gestión de Productos</h1>
-        <a href="/principal" class="btn">← Volver</a>
-    </div>
-
-    <div class="btn-group">
-        <button class="btn btn-primary" onclick="abrirModalProducto()">➕ Nuevo Producto</button>
-    </div>
-
-    <div class="table-container">
-        <h2 style="color: #FFD700; margin-bottom: 15px;"> Listado de Productos</h2>
+    <div class="card">
+        <h2 style="color: #FFD700; margin-bottom: 20px;"> Productos</h2>
+        <a th:href="@{/productos/nuevo}" class="btn">+ Nuevo Producto</a>
+        <a th:href="@{/}" class="btn" style="background: rgba(255,255,255,0.2); color:white; margin-left:10px;">Cancelar</a>
         <table>
-            <thead><tr><th>ID</th><th>Nombre</th><th>Descripción</th><th>Precio</th><th>Stock</th><th>Acciones</th></tr></thead>
+            <thead>
+            <tr><th>ID</th><th>Nombre</th><th>Descripción</th><th>Precio</th><th>Stock</th><th>Acciones</th></tr>
+            </thead>
             <tbody>
             <tr th:each="producto : ${productos}">
-                <td th:text="${producto.idProducto}">-</td>
-                <td th:text="${producto.nombre}">-</td>
-                <td th:text="${producto.descripcion}">-</td>
-                <td th:text="'Q' + ${producto.precio}">-</td>
-                <td th:text="${producto.stock}">-</td>
-                <td><button class="btn" th:onclick="'eliminarProducto(' + ${producto.idProducto} + ')'">🗑️ Eliminar</button></td>
+                <td th:text="${producto.idProducto}"></td>
+                <td th:text="${producto.nombre}"></td>
+                <td th:text="${producto.descripcion}"></td>
+                <td th:text="${producto.precio}"></td>
+                <td th:text="${producto.stock}"></td>
+                <td><a th:href="@{/productos/editar/{id}(id=${producto.idProducto})}">Editar</a></td>
             </tr>
-            <tr th:if="${productos.empty}"><td colspan="6" style="text-align:center">No hay productos registrados</td></tr>
             </tbody>
         </table>
     </div>
 </div>
-
-<!-- Modal Producto -->
-<div id="modalProducto" class="modal">
-    <div class="modal-content">
-        <span class="close" onclick="cerrarModal('modalProducto')">&times;</span>
-        <h2>➕ Nuevo Producto</h2>
-        <input type="text" id="nombreProducto" placeholder="Nombre">
-        <input type="text" id="descripcionProducto" placeholder="Descripción">
-        <input type="number" id="precioProducto" placeholder="Precio" step="0.01">
-        <input type="number" id="stockProducto" placeholder="Stock">
-        <button onclick="guardarProducto()">Guardar Producto</button>
-    </div>
-</div>
-
-<script>
-    function abrirModalProducto() { document.getElementById('modalProducto').style.display = 'flex'; }
-    function cerrarModal(id) { document.getElementById(id).style.display = 'none'; }
-    function guardarProducto() {
-        const producto = {
-            nombre: document.getElementById('nombreProducto').value,
-            descripcion: document.getElementById('descripcionProducto').value,
-            precio: parseFloat(document.getElementById('precioProducto').value),
-            stock: parseInt(document.getElementById('stockProducto').value)
-        };
-        fetch('/api/productos', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(producto)
-        }).then(response => {
-            if (response.ok) {
-                alert('Producto guardado');
-                cerrarModal('modalProducto');
-                location.reload();
-            } else { alert('Error'); }
-        });
-    }
-    function eliminarProducto(id) {
-        if (confirm('¿Eliminar producto?')) {
-            fetch('/api/productos/' + id, { method: 'DELETE' })
-                .then(() => location.reload());
-        }
-    }
-    window.onclick = function(e) { if (e.target.classList.contains('modal')) e.target.style.display = 'none'; }
-</script>
 </body>
-</html>"<!-- Actualizacion 1 -->" 
+</html>
