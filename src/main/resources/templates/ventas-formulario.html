@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Nueva Venta</title>
+</head>
+<body>
+<h1>Nueva Venta</h1>
+
+<div th:if="${error}" style="color:red;" th:text="${error}"></div>
+
+<p>Clientes: <span th:text="${clientes.size()}"></span></p>
+<p>Productos: <span th:text="${productos.size()}"></span></p>
+
+<form action="/ventas/guardar" method="post">
+    <div>
+        <label>Cliente:</label>
+        <select name="clienteDpi" required>
+            <option value="">Seleccione</option>
+            <option th:each="cliente : ${clientes}"
+                    th:value="${cliente.dpiCliente}"
+                    th:text="${cliente.nombreCliente}">
+            </option>
+        </select>
+    </div>
+
+    <div>
+        <label>Producto:</label>
+        <select name="productoId" required>
+            <option value="">Seleccione</option>
+            <option th:each="producto : ${productos}"
+                    th:value="${producto.idProducto}"
+                    th:text="${producto.nombre}">
+            </option>
+        </select>
+    </div>
+
+    <div>
+        <label>Cantidad:</label>
+        <input type="number" name="cantidad" required>
+    </div>
+
+    <div>
+        <label>Fecha:</label>
+        <input type="date" name="fecha" required>
+    </div>
+
+    <div>
+        <label>Estado:</label>
+        <select name="estado">
+            <option value="1">Activo</option>
+            <option value="0">Inactivo</option>
+        </select>
+    </div>
+
+    <button type="submit">Guardar</button>
+    <a th:href="@{/ventas}">Cancelar</a>
+</form>
+</body>
+</html>
