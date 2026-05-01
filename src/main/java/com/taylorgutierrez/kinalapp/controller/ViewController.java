@@ -1,15 +1,19 @@
 package com.taylorgutierrez.kinalapp.controller;
 
 import com.taylorgutierrez.kinalapp.entity.Cliente;
+import com.taylorgutierrez.kinalapp.entity.Producto;
+import com.taylorgutierrez.kinalapp.entity.Venta;
 import com.taylorgutierrez.kinalapp.service.ClienteService;
 import com.taylorgutierrez.kinalapp.service.ProductoService;
 import com.taylorgutierrez.kinalapp.service.VentaService;
-import com.taylorgutierrez.kinalapp.service.DetalleVentaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import java.time.LocalDate;
+import java.util.List;
+import java.util.Optional;
 
 @Controller
 public class ViewController {
@@ -18,68 +22,145 @@ public class ViewController {
     private ClienteService clienteService;
 
     @Autowired
-    private ProductoService productoService;
-
-    @Autowired
     private VentaService ventaService;
 
     @Autowired
-    private DetalleVentaService detalleVentaService;
+    private ProductoService productoService;
 
-    @GetMapping("/principal")
-    public String principal() {
-        return "principal";
+
+
+    @GetMapping("/")
+    public String index() {
+        return "index";
     }
 
-    @GetMapping("/clientes-view")
-    public String clientes(Model model) {
+
+
+    @GetMapping("/clientes")
+    public String listarClientes(Model model) {
         model.addAttribute("clientes", clienteService.listarClientes());
         return "clientes";
     }
 
     @GetMapping("/clientes/nuevo")
-    public String nuevoCliente(Model model) {
+    public String mostrarFormularioNuevoCliente(Model model) {
         model.addAttribute("cliente", new Cliente());
         return "clientes-formulario";
     }
 
-    @PostMapping("/clientes/guardar")
-    public String guardarCliente(@RequestParam String dpiCliente,
-                                 @RequestParam String nombreCliente,
-                                 @RequestParam String apellidoCliente,
-                                 @RequestParam String direccion,
-                                 RedirectAttributes redirect) {
-        try {
-            Cliente cliente = new Cliente();
-            cliente.setDpiCliente(dpiCliente);
-            cliente.setNombreCliente(nombreCliente);
-            cliente.setApellidoCliente(apellidoCliente);
-            cliente.setDireccion(direccion);
-            cliente.setEstado(1);  //  1 = Activo
-
-            clienteService.guardar(cliente);
-            redirect.addFlashAttribute("exito", "Cliente guardado exitosamente");
-        } catch (Exception e) {
-            redirect.addFlashAttribute("error", "Error al guardar: " + e.getMessage());
+    @GetMapping("/clientes/editar/{dpi}")
+    public String mostrarFormularioEditarCliente(@PathVariable String dpi, Model model) {
+        Optional<Cliente> cliente = clienteService.buscarPorDPI(dpi);
+        if (cliente.isPresent()) {
+            model.addAttribute("cliente", cliente.get());
+            return "clientes-formulario";
         }
-        return "redirect:/clientes-view";
+        return "redirect:/clientes";
     }
 
-    @GetMapping("/productos-view")
-    public String productos(Model model) {
+    @PostMapping("/clientes/guardar")
+    public String guardarCliente(@ModelAttribute Cliente cliente) {
+        clienteService.guardar(cliente);
+        return "redirect:/clientes";
+    }
+
+    @GetMapping("/clientes/eliminar/{dpi}")
+    public String eliminarCliente(@PathVariable String dpi) {
+        if (clienteService.existePorDPI(dpi)) {
+            clienteService.eliminar(dpi);
+        }
+        return "redirect:/clientes";
+    }
+
+    // ========== PRODUCTOS ==========
+
+    @GetMapping("/productos")
+    public String listarProductos(Model model) {
         model.addAttribute("productos", productoService.listarProductos());
         return "productos";
     }
 
-    @GetMapping("/ventas-view")
-    public String ventas(Model model) {
+    @GetMapping("/productos/nuevo")
+    public String mostrarFormularioNuevoProducto(Model model) {
+        model.addAttribute("producto", new Producto());
+        return "productos-formulario";
+    }
+
+    @PostMapping("/productos/guardar")
+    public String guardarProducto(@ModelAttribute Producto producto) {
+        productoService.guardar(producto);
+        return "redirect:/productos";
+    }
+
+    // ========== VENTAS ==========
+
+    @GetMapping("/ventas")
+    public String listarVentas(Model model) {
         model.addAttribute("ventas", ventaService.listarVentas());
         return "ventas";
     }
 
-    @GetMapping("/detalle-venta-view")
-    public String detalleVenta(Model model) {
-        model.addAttribute("detalles", detalleVentaService.listarDetalles());
-        return "detalle-venta";
+    @GetMapping("/ventas/nuevo")
+    public String mostrarFormularioNuevoVenta(Model model) {
+        model.addAttribute("venta", new Venta());
+        model.addAttribute("clientes", clienteService.listarClientes());
+        model.addAttribute("productos", productoService.listarProductos());
+        return "ventas-formulario";
+    }
+
+    @PostMapping("/ventas/guardar")
+    public String guardarVenta(@RequestParam String clienteDpi,
+                               @RequestParam Long productoId,
+                               @RequestParam Integer cantidad,
+                               @RequestParam String fecha,
+                               @RequestParam Integer estado,
+                               @RequestParam(required = false) Double total,
+                               Model model) {
+        try {
+            System.out.println("=== GUARDANDO VENTA ===");
+            System.out.println("Cliente DPI: " + clienteDpi);
+            System.out.println("Producto ID: " + productoId);
+            System.out.println("Cantidad: " + cantidad);
+            System.out.println("Fecha: " + fecha);
+            System.out.println("Estado: " + estado);
+
+            Venta venta = new Venta();
+            venta.setClienteDpi(clienteDpi);
+            venta.setProductoId(productoId);
+            venta.setCantidad(cantidad);
+            venta.setFecha(LocalDate.parse(fecha));
+            venta.setEstado(estado);
+
+            // Obtener el precio del producto
+            Optional<Producto> producto = productoService.buscarPorId(productoId);
+            if (producto.isPresent()) {
+                double precioUnitario = producto.get().getPrecio();
+                venta.setPrecioUnitario(precioUnitario);
+                venta.setTotal(cantidad * precioUnitario);
+                System.out.println("Precio unitario: " + precioUnitario);
+                System.out.println("Total: " + venta.getTotal());
+            } else {
+                System.out.println(" Producto no encontrado con ID: " + productoId);
+            }
+
+            Venta guardada = ventaService.guardar(venta);
+            System.out.println(" Venta guardada con ID: " + guardada.getIdVenta());
+
+            return "redirect:/ventas";
+
+        } catch (Exception e) {
+            System.out.println(" ERROR: " + e.getMessage());
+            e.printStackTrace();
+            model.addAttribute("error", "Error al guardar: " + e.getMessage());
+            model.addAttribute("clientes", clienteService.listarClientes());
+            model.addAttribute("productos", productoService.listarProductos());
+            return "ventas-formulario";
+        }
+    }
+
+    @GetMapping("/ventas/eliminar/{id}")
+    public String eliminarVenta(@PathVariable Long id) {
+        ventaService.eliminar(id);
+        return "redirect:/ventas";
     }
 }
