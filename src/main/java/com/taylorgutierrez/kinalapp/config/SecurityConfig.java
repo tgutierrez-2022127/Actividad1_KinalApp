@@ -18,40 +18,30 @@ public class SecurityConfig {
     private CustomUserDetailsService userDetailsService;
 
     @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
-
-    @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-                .authorizeHttpRequests(auth -> auth
-                        // Rutas publicas
-                        .requestMatchers("/login", "/registro", "/css/**", "/js/**", "/images/**").permitAll()
-                        // Solo ADMIN puede crear, editar, eliminar
-                        .requestMatchers("/api/clientes/guardar", "/api/clientes/eliminar/**",
-                                "/api/productos/guardar", "/api/productos/eliminar/**",
-                                "/clientes/nuevo", "/productos/nuevo",
-                                "/clientes/editar/**", "/productos/editar/**").hasRole("ADMIN")
-                        // CLIENTE y ADMIN pueden ver
-                        .requestMatchers("/api/clientes", "/api/productos", "/principal",
-                                "/clientes-view", "/productos-view", "/ventas-view",
-                                "/detalle-venta-view").hasAnyRole("ADMIN", "CLIENTE")
+                .csrf().disable()
+                .authorizeHttpRequests(authz -> authz
+                        .requestMatchers("/login", "/registro", "/css/**", "/js/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form
                         .loginPage("/login")
-                        .defaultSuccessUrl("/principal", true)
+                        .loginProcessingUrl("/login")
+                        .defaultSuccessUrl("/", true)
+                        .failureUrl("/login?error=true")
                         .permitAll()
                 )
                 .logout(logout -> logout
-                        .logoutSuccessUrl("/login?logout")
+                        .logoutSuccessUrl("/login?logout=true")
                         .permitAll()
-                )
-                .userDetailsService(userDetailsService)
-                .httpBasic(httpBasic -> httpBasic.init(http))
-                .csrf(csrf -> csrf.disable());
+                );
 
         return http.build();
+    }
+
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
     }
 }
