@@ -22,27 +22,23 @@ public class ProductoService {
         return productoRepository.findById(id);
     }
 
-    public boolean existePorId(Long id) {
-        return productoRepository.existsById(id);
-    }
-
-    public Producto actualizar(Long id, Producto productoActualizado) {
-        Producto productoExistente = productoRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Producto no encontrado"));
-
-        productoExistente.setNombre(productoActualizado.getNombre());
-        productoExistente.setDescripcion(productoActualizado.getDescripcion());
-        productoExistente.setPrecio(productoActualizado.getPrecio());
-        productoExistente.setStock(productoActualizado.getStock());
-
-        return productoRepository.save(productoExistente);
-    }
-
     public Producto guardar(Producto producto) {
+        return productoRepository.save(producto);
+    }
+
+    public Producto actualizar(Long id, Producto producto) {
+        if (!productoRepository.existsById(id)) {
+            throw new RuntimeException("Producto no encontrado con ID: " + id);
+        }
+        producto.setIdProducto(id);
         return productoRepository.save(producto);
     }
 
     public void eliminar(Long id) {
         productoRepository.deleteById(id);
+    }
+
+    public boolean existePorId(Long id) {
+        return productoRepository.existsById(id);
     }
 }

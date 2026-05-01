@@ -19,14 +19,23 @@ public class CustomUserDetailsService implements UserDetailsService {
     private UsuarioRepository usuarioRepository;
 
     @Override
-    public UserDetails loadUserByUsername(String correo) throws UsernameNotFoundException {
-        Usuario usuario = usuarioRepository.findByCorreo(correo)
-                .orElseThrow(() -> new UsernameNotFoundException("Usuario no encontrado con email: " + correo));
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+        System.out.println(" Buscando usuario: " + email);
 
-        return new User(
-                usuario.getCorreo(),
-                usuario.getPassword(),
-                Collections.singletonList(new SimpleGrantedAuthority("ROLE_" + usuario.getRol()))
-        );
+        Usuario usuario = usuarioRepository.findByCorreo(email)
+                .orElseThrow(() -> new UsernameNotFoundException("Usuario no encontrado: " + email));
+
+        System.out.println(" Usuario encontrado: " + usuario.getCorreo());
+        System.out.println(" Rol en BD: " + usuario.getRol());
+
+
+        String role = "ROLE_" + usuario.getRol();
+        System.out.println(" Rol convertido para Spring: " + role);
+
+        return User.builder()
+                .username(usuario.getCorreo())
+                .password(usuario.getPassword())
+                .authorities(Collections.singletonList(new SimpleGrantedAuthority(role)))
+                .build();
     }
 }
