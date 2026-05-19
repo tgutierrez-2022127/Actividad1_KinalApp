@@ -24,33 +24,15 @@ public class VentaService {
     }
 
     public Venta guardar(Venta venta) {
-        try {
-            System.out.println("=== VentaService.guardar() ===");
-            System.out.println("Cliente DPI: " + venta.getClienteDpi());
-            System.out.println("Producto ID: " + venta.getProductoId());
-            System.out.println("Cantidad: " + venta.getCantidad());
-            System.out.println("Precio Unitario: " + venta.getPrecioUnitario());
-            System.out.println("Total: " + venta.getTotal());
-
-            if (venta.getFecha() == null) {
-                venta.setFecha(LocalDate.now());
-            }
-            if (venta.getEstado() == null) {
-                venta.setEstado(1);
-            }
-
-            Venta saved = ventaRepository.save(venta);
-            System.out.println(" Venta guardada con ID: " + saved.getIdVenta());
-            return saved;
-
-        } catch (Exception e) {
-            System.out.println(" Error en ventaService: " + e.getMessage());
-            e.printStackTrace();
-            throw e;
+        if (venta.getFecha() == null) {
+            venta.setFecha(LocalDate.now());
         }
+        if (venta.getEstado() == null) {
+            venta.setEstado(1);
+        }
+        return ventaRepository.save(venta);
     }
 
-    //  Método actualizar - necesario para editar
     public Venta actualizar(Long id, Venta venta) {
         if (!ventaRepository.existsById(id)) {
             throw new RuntimeException("Venta no encontrada con ID: " + id);
