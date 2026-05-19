@@ -7,7 +7,6 @@ import jakarta.persistence.*;
 public class Cliente {
 
     @Id
-    @Column(name = "dpi_cliente", nullable = false, length = 20)
     private String dpiCliente;
 
     @Column(name = "nombre_cliente")
@@ -16,28 +15,11 @@ public class Cliente {
     @Column(name = "apellido_cliente")
     private String apellidoCliente;
 
-    @Column(name = "direccion")
     private String direccion;
-
-    @Column(name = "estado")
-    private int estado;
+    private Integer estado;
 
 
-    // Constructor vacío
-    public Cliente() {
-    }
-
-    // Constructor con parámetros
-    public Cliente(String dpiCliente, String nombreCliente, String apellidoCliente, String direccion, int estado) {
-        this.dpiCliente = dpiCliente;
-        this.nombreCliente = nombreCliente;
-        this.apellidoCliente = apellidoCliente;
-        this.direccion = direccion;
-        this.estado = estado;
-    }
-
-
-
+    // Getters y Setters
     public String getDpiCliente() {
         return dpiCliente;
     }
@@ -70,11 +52,11 @@ public class Cliente {
         this.direccion = direccion;
     }
 
-    public int getEstado() {
+    public Integer getEstado() {
         return estado;
     }
 
-    public void setEstado(int estado) {
+    public void setEstado(Integer estado) {
         this.estado = estado;
     }
 }

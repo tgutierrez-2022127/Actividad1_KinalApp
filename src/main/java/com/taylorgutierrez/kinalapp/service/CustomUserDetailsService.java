@@ -9,7 +9,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-
 import java.util.Collections;
 
 @Service
@@ -19,14 +18,20 @@ public class CustomUserDetailsService implements UserDetailsService {
     private UsuarioRepository usuarioRepository;
 
     @Override
-    public UserDetails loadUserByUsername(String correo) throws UsernameNotFoundException {
-        Usuario usuario = usuarioRepository.findByCorreo(correo)
-                .orElseThrow(() -> new UsernameNotFoundException("Usuario no encontrado con email: " + correo));
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+        Usuario usuario = usuarioRepository.findByCorreo(email)
+                .orElseThrow(() -> new UsernameNotFoundException("Usuario no encontrado: " + email));
 
-        return new User(
-                usuario.getCorreo(),
-                usuario.getPassword(),
-                Collections.singletonList(new SimpleGrantedAuthority("ROLE_" + usuario.getRol()))
-        );
+        System.out.println("Usuario: " + usuario.getCorreo() + " - Rol en BD: " + usuario.getRol());
+
+        // Spring Security necesita el rol con prefijo ROLE_
+        String rolConPrefijo = "ROLE_" + usuario.getRol();
+        System.out.println("Rol para Spring Security: " + rolConPrefijo);
+
+        return User.builder()
+                .username(usuario.getCorreo())
+                .password(usuario.getPassword())
+                .authorities(Collections.singletonList(new SimpleGrantedAuthority(rolConPrefijo)))
+                .build();
     }
 }

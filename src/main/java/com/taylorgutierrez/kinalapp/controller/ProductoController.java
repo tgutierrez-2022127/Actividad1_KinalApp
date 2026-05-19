@@ -13,7 +13,7 @@ public class ProductoController {
 
     private final ProductoService productoService;
 
-    // ✅ Usa la clase directamente, no la interfaz
+
     public ProductoController(ProductoService productoService) {
         this.productoService = productoService;
     }

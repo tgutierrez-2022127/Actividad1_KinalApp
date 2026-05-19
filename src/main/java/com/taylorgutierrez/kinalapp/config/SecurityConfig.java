@@ -1,7 +1,5 @@
 package com.taylorgutierrez.kinalapp.config;
 
-import com.taylorgutierrez.kinalapp.service.CustomUserDetailsService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -14,44 +12,39 @@ import org.springframework.security.web.SecurityFilterChain;
 @EnableWebSecurity
 public class SecurityConfig {
 
-    @Autowired
-    private CustomUserDetailsService userDetailsService;
-
     @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
-
-    @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-                .authorizeHttpRequests(auth -> auth
-                        // Rutas publicas
-                        .requestMatchers("/login", "/registro", "/css/**", "/js/**", "/images/**").permitAll()
-                        // Solo ADMIN puede crear, editar, eliminar
-                        .requestMatchers("/api/clientes/guardar", "/api/clientes/eliminar/**",
-                                "/api/productos/guardar", "/api/productos/eliminar/**",
-                                "/clientes/nuevo", "/productos/nuevo",
-                                "/clientes/editar/**", "/productos/editar/**").hasRole("ADMIN")
-                        // CLIENTE y ADMIN pueden ver
-                        .requestMatchers("/api/clientes", "/api/productos", "/principal",
-                                "/clientes-view", "/productos-view", "/ventas-view",
-                                "/detalle-venta-view").hasAnyRole("ADMIN", "CLIENTE")
+                .csrf().disable()
+                .authorizeHttpRequests(authz -> authz
+                        // Rutas públicas
+                        .requestMatchers("/login", "/registro", "/css/**", "/js/**").permitAll()
+
+                        // ===== RUTAS QUE TODOS PUEDEN VER (ADMIN Y CLIENTE) =====
+                        .requestMatchers("/clientes", "/productos", "/ventas", "/detalle-ventas", "/detalle-ventas/**").hasAnyRole("ADMIN", "USER")
+
+                        // ===== RUTAS SOLO PARA ADMIN (crear, editar, eliminar) =====
+                        .requestMatchers("/clientes/nuevo", "/clientes/editar/**", "/clientes/guardar", "/clientes/eliminar/**",
+                                "/productos/nuevo", "/productos/editar/**", "/productos/guardar", "/productos/eliminar/**",
+                                "/ventas/nuevo", "/ventas/editar/**", "/ventas/guardar", "/ventas/eliminar/**").hasRole("ADMIN")
+
+                        // Cualquier otra ruta requiere autenticación
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form
                         .loginPage("/login")
-                        .defaultSuccessUrl("/principal", true)
+                        .defaultSuccessUrl("/", true)
                         .permitAll()
                 )
                 .logout(logout -> logout
                         .logoutSuccessUrl("/login?logout")
                         .permitAll()
-                )
-                .userDetailsService(userDetailsService)
-                .httpBasic(httpBasic -> httpBasic.init(http))
-                .csrf(csrf -> csrf.disable());
-
+                );
         return http.build();
+    }
+
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
     }
 }
