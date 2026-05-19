@@ -13,7 +13,7 @@ public class ProductoController {
 
     private final ProductoService productoService;
 
-    // ✅ Usa la clase directamente, no la interfaz
+
     public ProductoController(ProductoService productoService) {
         this.productoService = productoService;
     }
@@ -56,4 +56,4 @@ public class ProductoController {
         productoService.eliminar(id);
         return ResponseEntity.noContent().build();
     }
-}"// Actualizacion 1" 
+}

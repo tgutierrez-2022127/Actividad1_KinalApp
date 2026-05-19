@@ -3,32 +3,31 @@ package com.taylorgutierrez.kinalapp.controller;
 import com.taylorgutierrez.kinalapp.entity.DetalleVenta;
 import com.taylorgutierrez.kinalapp.service.DetalleVentaService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@RestController
-@RequestMapping("/api/detalle-venta")
+@Controller
+@RequestMapping("/detalle-ventas")
 public class DetalleVentaController {
 
     @Autowired
     private DetalleVentaService detalleVentaService;
 
     @GetMapping
-    public ResponseEntity<List<DetalleVenta>> listarDetalles() {
-        return ResponseEntity.ok(detalleVentaService.listarDetalles());
+    public String listarTodos(Model model) {
+        List<DetalleVenta> detalles = detalleVentaService.listarDetalles();
+        model.addAttribute("detalles", detalles);
+        return "detalle-venta";
     }
 
-    @PostMapping
-    public ResponseEntity<DetalleVenta> guardar(@RequestBody DetalleVenta detalleVenta) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(detalleVentaService.guardar(detalleVenta));
+    @GetMapping("/venta/{idVenta}")
+    public String listarPorVenta(@PathVariable Long idVenta, Model model) {
+        List<DetalleVenta> detalles = detalleVentaService.buscarPorVenta(idVenta);
+        model.addAttribute("detalles", detalles);
+        model.addAttribute("idVenta", idVenta);
+        return "detalle-venta";
     }
-
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> eliminar(@PathVariable Long id) {
-        detalleVentaService.eliminar(id);
-        return ResponseEntity.noContent().build();
-    }
-}"// Actualizacion 1" 
+}

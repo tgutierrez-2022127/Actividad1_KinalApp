@@ -10,55 +10,34 @@ public class DetalleVenta {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idDetalle;
 
-    @ManyToOne
-    @JoinColumn(name = "id_producto")
-    private Producto producto;
+    @Column(name = "id_venta")
+    private Long idVenta;
 
-    @ManyToOne
-    @JoinColumn(name = "id_venta")
-    private Venta venta;
+    @Column(name = "id_producto")
+    private Long idProducto;
 
-    private int cantidad;
-    private double precio;
+    private Integer cantidad;
+    private Double precio;
+    private Double subtotal;
 
-    // getters y setters
-    public Long getIdDetalle() {
-        return idDetalle;
-    }
+    public DetalleVenta() {}
 
-    public void setIdDetalle(Long idDetalle) {
-        this.idDetalle = idDetalle;
-    }
+    // Getters y Setters
+    public Long getIdDetalle() { return idDetalle; }
+    public void setIdDetalle(Long idDetalle) { this.idDetalle = idDetalle; }
 
-    public Producto getProducto() {
-        return producto;
-    }
+    public Long getIdVenta() { return idVenta; }
+    public void setIdVenta(Long idVenta) { this.idVenta = idVenta; }
 
-    public void setProducto(Producto producto) {
-        this.producto = producto;
-    }
+    public Long getIdProducto() { return idProducto; }
+    public void setIdProducto(Long idProducto) { this.idProducto = idProducto; }
 
-    public Venta getVenta() {
-        return venta;
-    }
+    public Integer getCantidad() { return cantidad; }
+    public void setCantidad(Integer cantidad) { this.cantidad = cantidad; }
 
-    public void setVenta(Venta venta) {
-        this.venta = venta;
-    }
+    public Double getPrecio() { return precio; }
+    public void setPrecio(Double precio) { this.precio = precio; }
 
-    public int getCantidad() {
-        return cantidad;
-    }
-
-    public void setCantidad(int cantidad) {
-        this.cantidad = cantidad;
-    }
-
-    public double getPrecio() {
-        return precio;
-    }
-
-    public void setPrecio(double precio) {
-        this.precio = precio;
-    }
-}"// Actualizacion 1" 
+    public Double getSubtotal() { return subtotal; }
+    public void setSubtotal(Double subtotal) { this.subtotal = subtotal; }
+}

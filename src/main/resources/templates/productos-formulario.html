@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>KinalApp - Cliente</title>
+    <title>KinalApp - Producto</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -25,7 +25,6 @@
             -webkit-background-clip: text;
             background-clip: text;
             color: transparent;
-            font-size: 24px;
         }
         .nav-links a {
             color: white;
@@ -33,30 +32,28 @@
             margin-left: 25px;
             padding: 8px 15px;
             border-radius: 10px;
-            transition: all 0.3s;
         }
         .nav-links a:hover { background: rgba(255, 215, 0, 0.2); color: #FFD700; }
-        .container { max-width: 600px; margin: 50px auto; padding: 20px; }
+        .container { max-width: 600px; margin: 40px auto; padding: 20px; }
         .form-card {
-            background: rgba(26, 26, 46, 0.9);
+            background: rgba(26, 26, 46, 0.8);
             backdrop-filter: blur(10px);
             border-radius: 20px;
-            padding: 35px;
+            padding: 30px;
             border: 1px solid rgba(255, 215, 0, 0.3);
         }
-        .form-card h2 { color: #FFD700; text-align: center; margin-bottom: 30px; }
         .form-group { margin-bottom: 20px; }
-        label { display: block; margin-bottom: 8px; color: #FFD700; font-weight: 500; }
-        input, select {
+        label { display: block; margin-bottom: 8px; color: #FFD700; }
+        input, textarea {
             width: 100%;
-            padding: 12px 15px;
+            padding: 12px;
             background: rgba(255,255,255,0.1);
             border: 1px solid rgba(255,215,0,0.3);
             border-radius: 10px;
             color: white;
         }
-        input:focus, select:focus { outline: none; border-color: #FFD700; }
-        .btn-group { display: flex; gap: 15px; margin-top: 30px; }
+        input:focus, textarea:focus { outline: none; border-color: #FFD700; }
+        .btn-group { display: flex; gap: 15px; margin-top: 25px; }
         .btn {
             flex: 1;
             padding: 12px;
@@ -75,43 +72,35 @@
 <div class="navbar">
     <h2> KinalApp</h2>
     <div class="nav-links">
-        <a th:href="@{/clientes}"> Clientes</a>
-        <a th:href="@{/ventas}"> Ventas</a>
-        <a th:href="@{/productos}"> Productos</a>
-        <a th:href="@{/logout}"> Cerrar Sesión</a>
+        <a th:href="@{/clientes}">Clientes</a>
+        <a th:href="@{/ventas}">Ventas</a>
+        <a th:href="@{/productos}">Productos</a>
+        <a th:href="@{/logout}">Cerrar Sesión</a>
     </div>
 </div>
 <div class="container">
     <div class="form-card">
-        <h2 th:text="${cliente.dpiCliente != null} ? '️ Editar Cliente' : ' Nuevo Cliente'"></h2>
-
-        <form th:action="@{/clientes/guardar}" th:object="${cliente}" method="post">
+        <h2 style="color:#FFD700; margin-bottom:25px;"> Producto</h2>
+        <form th:action="@{/productos/guardar}" th:object="${producto}" method="post">
             <div class="form-group">
-                <label> DPI</label>
-                <input type="text" th:field="*{dpiCliente}" th:readonly="${cliente.dpiCliente != null}" placeholder="Ingrese el DPI" required>
+                <label>Nombre</label>
+                <input type="text" th:field="*{nombre}" required>
             </div>
             <div class="form-group">
-                <label> Nombre</label>
-                <input type="text" th:field="*{nombreCliente}" placeholder="Ingrese el nombre" required>
+                <label>Descripción</label>
+                <textarea th:field="*{descripcion}" rows="3"></textarea>
             </div>
             <div class="form-group">
-                <label> Apellido</label>
-                <input type="text" th:field="*{apellidoCliente}" placeholder="Ingrese el apellido" required>
+                <label>Precio</label>
+                <input type="number" step="0.01" th:field="*{precio}" required>
             </div>
             <div class="form-group">
-                <label> Dirección</label>
-                <input type="text" th:field="*{direccion}" placeholder="Ingrese la dirección">
-            </div>
-            <div class="form-group">
-                <label>⚡ Estado</label>
-                <select th:field="*{estado}">
-                    <option value="1"> Activo</option>
-                    <option value="0"> Inactivo</option>
-                </select>
+                <label>Stock</label>
+                <input type="number" th:field="*{stock}" required>
             </div>
             <div class="btn-group">
-                <button type="submit" class="btn btn-primary"> Guardar</button>
-                <a th:href="@{/clientes}" class="btn btn-secondary"> Cancelar</a>
+                <button type="submit" class="btn btn-primary">Guardar</button>
+                <a th:href="@{/productos}" class="btn btn-secondary">Cancelar</a>
             </div>
         </form>
     </div>

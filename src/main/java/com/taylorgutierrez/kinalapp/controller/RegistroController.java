@@ -1,12 +1,12 @@
 package com.taylorgutierrez.kinalapp.controller;
 
 import com.taylorgutierrez.kinalapp.entity.Usuario;
-import com.taylorgutierrez.kinalapp.repository.UsuarioRepository;
+import com.taylorgutierrez.kinalapp.service.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -14,40 +14,38 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class RegistroController {
 
     @Autowired
-    private UsuarioRepository usuarioRepository;
-
-    @Autowired
-    private PasswordEncoder passwordEncoder;
+    private UsuarioService usuarioService;
 
     @GetMapping("/registro")
-    public String mostrarRegistro() {
+    public String mostrarFormularioRegistro(Model model) {
+        model.addAttribute("usuario", new Usuario());
         return "registro";
     }
 
     @PostMapping("/registro")
-    public String registrarUsuario(@RequestParam String nombre,
-                                   @RequestParam String apellido,
-                                   @RequestParam String correo,
-                                   @RequestParam String password,
-                                   @RequestParam String rol,
+    public String registrarUsuario(@ModelAttribute Usuario usuario,
+                                   @RequestParam("rol") String rol,
                                    Model model) {
+        try {
+            System.out.println("=== REGISTRO ===");
+            System.out.println("Email: " + usuario.getCorreo());
+            System.out.println("Rol seleccionado: " + rol);
 
-        if (usuarioRepository.existsByCorreo(correo)) {
-            model.addAttribute("error", "El correo ya esta registrado");
+            if (usuarioService.existePorEmail(usuario.getCorreo())) {
+                model.addAttribute("error", "El correo ya está registrado");
+                return "registro";
+            }
+
+            usuario.setRol(rol);
+            usuarioService.registrarUsuario(usuario);
+
+            System.out.println(" Usuario registrado exitosamente");
+            return "redirect:/login?registro=success";
+
+        } catch (Exception e) {
+            System.out.println(" Error: " + e.getMessage());
+            model.addAttribute("error", "Error al registrar: " + e.getMessage());
             return "registro";
         }
-
-        Usuario usuario = new Usuario();
-        usuario.setNombre(nombre);
-        usuario.setApellido(apellido);
-        usuario.setCorreo(correo);
-        usuario.setPassword(passwordEncoder.encode(password));
-        usuario.setEstado(1);
-        usuario.setRol(rol);
-
-        usuarioRepository.save(usuario);
-
-        model.addAttribute("exito", "Usuario registrado exitosamente. Ahora puede iniciar sesion.");
-        return "login";
     }
 }

@@ -38,7 +38,7 @@ public class ClienteController {
         if (!clienteService.existePorDPI(dpi)) {
             return ResponseEntity.notFound().build();
         }
-        // ✅ Ahora usamos setDpiCliente (con minúscula)
+
         cliente.setDpiCliente(dpi);
         return ResponseEntity.ok(clienteService.actualizar(dpi, cliente));
     }
@@ -51,4 +51,4 @@ public class ClienteController {
         clienteService.eliminar(dpi);
         return ResponseEntity.noContent().build();
     }
-}"// Actualizacion 1" 
+}

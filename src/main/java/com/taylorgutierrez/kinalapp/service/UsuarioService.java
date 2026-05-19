@@ -2,62 +2,74 @@ package com.taylorgutierrez.kinalapp.service;
 
 import com.taylorgutierrez.kinalapp.entity.Usuario;
 import com.taylorgutierrez.kinalapp.repository.UsuarioRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
 
 @Service
-@Transactional
-public class UsuarioService implements IUsuarioService {
+public class UsuarioService {
 
-    private final UsuarioRepository usuarioRepository;
+    @Autowired
+    private UsuarioRepository usuarioRepository;
 
-    public UsuarioService(UsuarioRepository usuarioRepository) {
-        this.usuarioRepository = usuarioRepository;
-    }
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
-    @Override
     public List<Usuario> listarUsuarios() {
         return usuarioRepository.findAll();
     }
 
-    @Override
-    public Usuario guardar(Usuario usuario) {
-        return usuarioRepository.save(usuario);
-    }
-
-    @Override
-    @Transactional(readOnly = true)
     public Optional<Usuario> buscarPorId(Long id) {
         return usuarioRepository.findById(id);
     }
 
-    @Override
+    public Optional<Usuario> buscarPorEmail(String email) {
+        return usuarioRepository.findByCorreo(email);
+    }
+
+    public boolean existePorEmail(String email) {
+        return usuarioRepository.findByCorreo(email).isPresent();
+    }
+
+    // ✅ AGREGAR ESTE MÉTODO
+    public boolean existePorId(Long id) {
+        return usuarioRepository.existsById(id);
+    }
+
+    public Usuario registrarUsuario(Usuario usuario) {
+        System.out.println("=== REGISTRANDO USUARIO ===");
+        System.out.println("Email: " + usuario.getCorreo());
+        System.out.println("Rol: " + usuario.getRol());
+
+        String passwordEncriptada = passwordEncoder.encode(usuario.getPassword());
+        usuario.setPassword(passwordEncriptada);
+
+        if (usuario.getRol() == null || usuario.getRol().isEmpty()) {
+            usuario.setRol("USER");
+        }
+        if (usuario.getEstado() == null) {
+            usuario.setEstado(1);
+        }
+
+        return usuarioRepository.save(usuario);
+    }
+
+    public Usuario guardar(Usuario usuario) {
+        return usuarioRepository.save(usuario);
+    }
+
     public Usuario actualizar(Long id, Usuario usuario) {
         if (!usuarioRepository.existsById(id)) {
-            throw new RuntimeException("Usuario no encontrado con id " + id);
+            throw new RuntimeException("Usuario no encontrado con ID: " + id);
         }
         usuario.setIdUsuario(id);
         return usuarioRepository.save(usuario);
     }
 
-    @Override
     public void eliminar(Long id) {
-        if (!usuarioRepository.existsById(id)) {
-            throw new RuntimeException("Usuario no encontrado con id " + id);
-        }
         usuarioRepository.deleteById(id);
-    }
-
-    @Override
-    public boolean existePorId(Long id) {
-        return usuarioRepository.existsById(id);
-    }
-
-    @Override
-    public List<Usuario> buscarPorEstado(Integer estado) {
-        return usuarioRepository.findByEstado(estado);
     }
 }

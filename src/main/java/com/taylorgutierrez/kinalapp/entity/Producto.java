@@ -8,31 +8,16 @@ public class Producto {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id_producto")
     private Long idProducto;
-    @Column
+
     private String nombre;
-
-    @Column
     private String descripcion;
+    private Double precio;
+    private Integer stock;
 
-    @Column
-    private double precio;
 
-    @Column
-    private int stock;
 
-    public Producto() {
-    }
-
-    public Producto(Long idProducto, String nombre, String descripcion, double precio, int stock) {
-        this.idProducto = idProducto;
-        this.nombre = nombre;
-        this.descripcion = descripcion;
-        this.precio = precio;
-        this.stock = stock;
-    }
-
+    // Getters y Setters
     public Long getIdProducto() {
         return idProducto;
     }
@@ -57,21 +42,19 @@ public class Producto {
         this.descripcion = descripcion;
     }
 
-    public double getPrecio() {
+    public Double getPrecio() {
         return precio;
     }
 
-    public void setPrecio(double precio) {
+    public void setPrecio(Double precio) {
         this.precio = precio;
     }
 
-    public int getStock() {
+    public Integer getStock() {
         return stock;
     }
 
-    public void setStock(int stock) {
+    public void setStock(Integer stock) {
         this.stock = stock;
     }
 }
-
-"// Actualizacion 1" 
